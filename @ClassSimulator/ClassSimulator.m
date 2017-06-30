@@ -108,6 +108,9 @@ classdef ClassSimulator < handle
         
         % add noise into rec file
         AddNoise2Rec(this, noiseConfig, foldPath, setId);
+        
+        % compute encoder measurement from odometric parameters
+        enc_out = CmpEncMsr(this, se2_b1_b2, mat_odo);
     end
     
 end
