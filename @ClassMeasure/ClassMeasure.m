@@ -1,34 +1,34 @@
 classdef ClassMeasure < handle
     properties
         % io configures
-        InputFolderPath;
-        InputMkFilePath;
-        InputOdoFilePath;
+        InputFolderPath = [];
+        InputMkFilePath = [];
+        InputOdoFilePath = [];
         
         % measurement data
-        odo;
-        mk;
-        time;
+        mk = struct('lp', [], 'id', [], ...
+            'rvec', [], 'tvec', [], 'num', [], ...
+            'numMkId', [], 'vecMkId', [], ...
+            'pt1', [], 'pt2', [], 'pt3', [], 'pt4', []);
+        odo = struct('lp',[], ...
+            'x',[],'y',[],'theta',[], ...
+            'enc_l', [], 'enc_r', [], ...
+            'num', []);
+        time = struct('lp',[],'t_odo',[],'t_mk',[]);
         
     end
     
     methods
         % constructor function, set input file path
         function this = ClassMeasure(PathFold, NameMk, NameOdo)
-            this.mk = struct('lp', [], 'id', [], ...
-                'rvec', [], 'tvec', [], 'num', [], ...
-                'numMkId', [], 'vecMkId', []);
-            this.odo = struct('lp',[], 'x',[],'y',[],'theta',[], ...
-                'num', []);
-            this.time = struct('lp',[],'t_odo',[],'t_mk',[]);
             if nargin == 1
                 this.InputFolderPath = PathFold;
-                this.InputMkFilePath = [PathFold, '/rec/Mk.rec'];
-                this.InputOdoFilePath = [PathFold, '/rec/Odo.rec'];                
-            elseif nargin == 3              
+                this.InputMkFilePath = [PathFold, 'record/mk.rec'];
+                this.InputOdoFilePath = [PathFold, 'record/odo.rec'];
+            elseif nargin == 3
                 this.InputFolderPath = PathFold;
-                this.InputMkFilePath = [PathFold, '/rec/', NameMk];
-                this.InputOdoFilePath = [PathFold, '/rec/', NameOdo];                   
+                this.InputMkFilePath = [PathFold, 'record/', NameMk];
+                this.InputOdoFilePath = [PathFold, 'record/', NameOdo];
             end
         end
         
@@ -38,8 +38,39 @@ classdef ClassMeasure < handle
             copy.time = this.time;
             copy.InputFolderPath = this.InputFolderPath;
             copy.InputMkFilePath = this.InputMkFilePath;
-            copy.InputOdoFilePath = this.InputOdoFilePath;            
+            copy.InputOdoFilePath = this.InputOdoFilePath;
         end
+        
+        function ClearAll(this)
+            % io configures
+            this.InputFolderPath = [];
+            this.InputMkFilePath = [];
+            this.InputOdoFilePath = [];
+            % measurement data
+            this.mk = struct('lp', [], 'id', [], ...
+                'rvec', [], 'tvec', [], 'num', [], ...
+                'numMkId', [], 'vecMkId', [], ...
+                'pt1', [], 'pt2', [], 'pt3', [], 'pt4', []);
+            this.odo = struct('lp',[], ...
+                'x',[],'y',[],'theta',[], ...
+                'enc_l', [], 'enc_r', [], ...
+                'num', []);
+            this.time = struct('lp',[],'t_odo',[],'t_mk',[]);
+        end
+        
+        function ClearData(this)
+            % measurement data
+            this.mk = struct('lp', [], 'id', [], ...
+                'rvec', [], 'tvec', [], 'num', [], ...
+                'numMkId', [], 'vecMkId', [], ...
+                'pt1', [], 'pt2', [], 'pt3', [], 'pt4', []);
+            this.odo = struct('lp',[], ...
+                'x',[],'y',[],'theta',[], ...
+                'enc_l', [], 'enc_r', [], ...
+                'num', []);
+            this.time = struct('lp',[],'t_odo',[],'t_mk',[]);
+        end
+        
         
         % function read input file
         ReadRecData(this);

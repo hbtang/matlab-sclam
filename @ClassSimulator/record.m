@@ -22,21 +22,28 @@ timestep = this.timestep;
 %% print Odo.rec
 if options.b_record_odo
     % open file
-    this.files.file_out_odo = fopen([this.files.str_simfolder, 'rec/Odo', options.str_suffix_odo, '.rec'],'w+');
+    this.files.file_out_odo = fopen([this.files.str_simfolder, 'record/odo', options.str_suffix_odo, '.rec'],'w+');
     fprintf(this.files.file_out_odo, '# odometry info\n');
-    fprintf(this.files.file_out_odo, '# format: lp timeOdo timeCam x y theta\n');
+    fprintf(this.files.file_out_odo, '# format: lp time_odo time_cam x y theta enc_l enc_r\n');
     
     % record data
-    odo_rec = this.odo_noise;
+    odo_rec = this.odo_rec;
     for i = 1:numel(odo_rec.lp)
         strOdo = [num2str(odo_rec.lp(i)), ' '];
         strOdo = [strOdo, ...
             num2str(odo_rec.lp(i)*timestep), ' ', ...
-            num2str(odo_rec.lp(i)*timestep), ' '];
+            num2str(odo_rec.lp(i)*timestep), ' ', ...
+            ];
         strOdo = [strOdo, ...
             num2str(odo_rec.x(i)), ' ', ...
             num2str(odo_rec.y(i)), ' ', ...
-            num2str(odo_rec.theta(i)), '\n',];
+            num2str(odo_rec.theta(i)), ' ', ...
+            ];
+        strOdo = [strOdo, ...
+            num2str(odo_rec.enc_l(i)), ' ', ...
+            num2str(odo_rec.enc_r(i)), ' ', ...
+            ];
+        strOdo = [strOdo, '\n'];
         fprintf(this.files.file_out_odo, strOdo);
     end
     
@@ -47,12 +54,12 @@ end
 %% print Mk.rec
 if options.b_record_mk
     % open file
-    this.files.file_out_mk = fopen([this.files.str_simfolder, 'rec/Mk', options.str_suffix_mk, '.rec'],'w+');
+    this.files.file_out_mk = fopen([this.files.str_simfolder, 'record/mk', options.str_suffix_mk, '.rec'],'w+');
     fprintf(this.files.file_out_mk, '# aruco mark observation info\n');
     fprintf(this.files.file_out_mk, '# format: lp id rvec(x y z) tvec(x y z) ptimg(x1 y1 x2 y2 x3 y3 x4 y4)\n');
     
     % record data
-    mk_rec = this.mk_noise;
+    mk_rec = this.mk_rec;
     for i = 1:numel(mk_rec.lp)
         lp = mk_rec.lp(i);
         id = mk_rec.id(i);

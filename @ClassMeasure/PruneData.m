@@ -10,33 +10,42 @@ end
 
 
 %% prune odometry data
-xRef = this.odo.x(1);
-yRef = this.odo.y(1);
-thetaRef = this.odo.theta(1);
-lpRef = this.odo.lp(1);
-odo_new = struct('lp',lpRef, 'x',xRef,'y',yRef,'theta',thetaRef);
+x_ref = this.odo.x(1);
+y_ref = this.odo.y(1);
+theta_ref = this.odo.theta(1);
+
+odo_new = struct( ...
+    'lp',this.odo.lp(1), ...
+    'x', this.odo.x(1), ...
+    'y', this.odo.y(1), ...
+    'theta', this.odo.theta(1), ...
+    'enc_l', this.odo.enc_l(1), ...
+    'enc_r', this.odo.enc_r(1));
 
 for i = 2:this.odo.num
-    xNow = this.odo.x(i);
-    yNow = this.odo.y(i);
-    thetaNow = this.odo.theta(i);
-    lpNow = this.odo.lp(i);
+    x_now = this.odo.x(i);
+    y_now = this.odo.y(i);
+    theta_now = this.odo.theta(i);
+    lp_now = this.odo.lp(i);
+    enc_l_now = this.odo.enc_l(i);
+    enc_r_now = this.odo.enc_r(i);
     
-    dx = xNow - xRef;
-    dy = yNow - yRef;
+    dx = x_now - x_ref;
+    dy = y_now - y_ref;
     dl = norm([dx;dy]);
-    dtheta = FunPrdCnst(thetaNow - thetaRef, pi, -pi);
+    dtheta = FunPrdCnst(theta_now - theta_ref, pi, -pi);
     
     if (dl > threshDistOdo) || (abs(dtheta) > threshAngleOdo)
-        odo_new.lp = [odo_new.lp; lpNow];
-        odo_new.x = [odo_new.x; xNow];
-        odo_new.y = [odo_new.y; yNow];
-        odo_new.theta = [odo_new.theta; thetaNow];
+        odo_new.lp = [odo_new.lp; lp_now];
+        odo_new.x = [odo_new.x; x_now];
+        odo_new.y = [odo_new.y; y_now];
+        odo_new.theta = [odo_new.theta; theta_now];
+        odo_new.enc_l = [odo_new.enc_l; enc_l_now];
+        odo_new.enc_r = [odo_new.enc_r; enc_r_now];
         
-        lpRef = lpNow;
-        xRef = xNow;
-        yRef = yNow;
-        thetaRef = thetaNow;
+        x_ref = x_now;
+        y_ref = y_now;
+        theta_ref = theta_now;
     end
 end
 odo_new.num = numel(odo_new.lp);

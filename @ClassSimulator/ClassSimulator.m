@@ -2,14 +2,15 @@ classdef ClassSimulator < handle
     %CLASSSIMULATOR class of simulator
     % to generate record file according to a predefined map
     
+    %%
     properties
         %% configuration
         % io configures
         files = struct( ...
-            'str_simfolder', [], ...
-            'file_out_odo', [], ...
-            'file_out_mk', [], ...
-            'str_path_setting', []);
+                'str_simfolder', [], ...
+                'file_out_odo', [], ...
+                'file_out_mk', [], ...
+                'str_path_setting', []);
         % handles of figure and figure objects
         hds = struct( ...
             'hdFigSim', [], ...
@@ -31,62 +32,44 @@ classdef ClassSimulator < handle
         
         %% robot status
         % current loop id
-        lp;
+        lp = 0;
         % current robot pose in w frame, single variable
-        ps2d_w_b;
-        % odometry measurements, with error ratio (proportional to measure)
-        odo;
-        % current mark measure, vector possible
-        mk;
+        ps2d_w_b = [0; 0; 0];
         % current robot velocity
-        vel_lin; vel_rot;
+        vel_lin = 0; 
+        vel_rot = 0;
+        % current encoder
+        enc_l = 0; 
+        enc_r = 0;
         
         %% raw data record
-        odo_true;
-        mk_true;
-        odo_noise;
-        mk_noise;
+        % odometry measurements, with error ratio (proportional to measure)
+        odo         = struct('lp',[],'x',[],'y',[],'theta',[],'enc_l',[],'enc_r',[]);
+        odo_true    = struct('lp',[],'x',[],'y',[],'theta',[],'enc_l',[],'enc_r',[]);
+        odo_rec     = struct('lp',[],'x',[],'y',[],'theta',[],'enc_l',[],'enc_r',[]);
+        % current mark measure, vector possible
+        mk          = struct('lp',[],'id',[],'rvec',[],'tvec',[],'image',[]);        
+        mk_true     = struct('lp',[],'id',[],'rvec',[],'tvec',[],'image',[]);        
+        mk_rec      = struct('lp',[],'id',[],'rvec',[],'tvec',[],'image',[]);
         
     end
     
+    %%
     methods
-        function this = ClassSimulator()
-            %% robot status
-            this.lp = 0;
-            this.ps2d_w_b = [0;0;0];
-            this.vel_lin = 0;
-            this.vel_rot = 0;
-            this.odo = struct('lp',0,'x',0,'y',0,'theta',0);
-            this.mk = struct('lp',[],'id',[],'rvec',[],'tvec',[]);
-            
-            %% raw data record
-            this.odo_true = struct('lp',0,'x',0,'y',0,'theta',0);
-            this.mk_true = struct('lp',[],'id',[],'rvec',[],'tvec',[],'image',[]);
-            this.odo_noise = struct('lp',0,'x',0,'y',0,'theta',0);
-            this.mk_noise = struct('lp',[],'id',[],'rvec',[],'tvec',[],'image',[]);
-            
-            %% simulation environment
+        
+        function this = ClassSimulator(name_sim_fold)
+            if nargin < 1
+                name_sim_fold = './sim/';
+            end
             this.map = ClassMap;
             this.calib = ClassCalib;
-            this.timestep = 0.1;
-            
-            %% configuration
-            this.files = struct( ...
-                'str_simfolder', [], ...
-                'file_out_odo', [], ...
-                'file_out_mk', [], ...
-                'str_path_setting', []);
-            this.hds = struct( ...
-                'hdFigSim', [], ...
-                'hdObjBaseX', [], 'hdObjBaseY', [], 'hdObjBaseZ', [], ...
-                'hdObjMap', [], 'hdObjRange', []);
-            this.flag = struct( ...
-                'bQuit', false);
-            this.setting = [];
+            this.timestep = 0.1;            
+            % load configures            
+             Init(this, name_sim_fold);
         end
         
         % init function, load map and calib info, set output path, ...
-        Init(this);
+        Init(this, name_sim_fold);
         % main function of simulator
         Run(this);
         % stop function
@@ -101,7 +84,8 @@ classdef ClassSimulator < handle
         mk_out = NoiseMk(this, mk_true, calib, setting);
         
         % write odo and mk into record file
-        Record( this, options )
+        Record(this, options)
+        AddNoiseRecord(this, options)
         
         % call back function when key pressed
         OnKeyPressed(this, hdFig, callBackData);
@@ -112,6 +96,7 @@ classdef ClassSimulator < handle
         % compute encoder measurement from odometric parameters
         enc_out = CmpEncMsr(this, se2_b1_b2, mat_odo);
     end
-    
 end
+
+
 

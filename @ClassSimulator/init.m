@@ -1,14 +1,10 @@
-function Init( this )
+function Init( this, name_sim_fold )
 %INIT init function, load map and calib info, set output path, ...
-if nargin == 2
-    str_simfolder = inputPath;
-else
-    str_simfolder = './sim/';
-end
 
-this.files.str_simfolder = str_simfolder;
-this.files.str_path_setting = [str_simfolder, '/cfg/setting-sim.yml'];
-this.setting = YAML.read('./sim/cfg/setting-sim.yml');
+name_setting_file = [name_sim_fold, 'config/setting-sim.yml'];
+this.files.str_simfolder = name_sim_fold;
+this.files.str_path_setting = name_setting_file;
+this.setting = YAML.read(this.files.str_path_setting);
 
 %% reading map data
 disp('Reading map data...');
@@ -25,16 +21,16 @@ disp(' ');
 
 %% reading config data
 disp('Reading camera config...');
-
 this.calib.rvec_b_c = this.setting.camera.rvec_b_c;
 this.calib.rvec_b_c = this.setting.camera.rvec_b_c;
 this.calib.mat_camera = this.setting.camera.camera_matrix;
 this.calib.vec_distortion = this.setting.camera.distortion_coefficients;
 this.calib.image_width = this.setting.camera.image_width;
 this.calib.image_height = this.setting.camera.image_height;
-this.calib.dt = this.setting.temporal.dt_b_c;
+% this.calib.dt = this.setting.temporal.dt_b_c;
 this.calib.k_odo_lin = this.setting.odometry.k_lin;
 this.calib.k_odo_rot = this.setting.odometry.k_rot;
+this.calib.mat_odo = this.setting.odometry.odo_matrix;
 
 this.calib.RefreshByVecbc;
 disp('All camera config data loaded.');

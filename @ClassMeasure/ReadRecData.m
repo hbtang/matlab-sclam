@@ -1,6 +1,9 @@
 function ReadRecData(this)
 %READRECDATA read record data from Mk.rec and Odo.rec
 
+% clear data
+this.ClearData();
+
 %% reading mark record data
 disp(['Reading mark record data from "', this.InputMkFilePath, '"...']);
 markFileId = fopen(this.InputMkFilePath,'r');
@@ -17,23 +20,12 @@ while ~feof(markFileId)
     lineTmp = str2num(lineTmp);
     if lineTmp(2) == 1023
         continue;
-    end
-    
-    % debug begin ...
-    % select several mk
-%     if lineTmp(2) > 5
-%         continue;
-%     end
-    % debug end
+    end    
         
     this.mk.lp = [this.mk.lp; lineTmp(1)];
     this.mk.id = [this.mk.id; lineTmp(2)];
     this.mk.rvec = [this.mk.rvec; lineTmp(3:5)];
     this.mk.tvec = [this.mk.tvec; lineTmp(6:8)];
-    
-    
-    
-    
     
     if numel(lineTmp) < 9
         continue;
@@ -53,8 +45,6 @@ disp(' ');
 %% reading odometry record data
 disp(['Reading odometry record data from "', this.InputOdoFilePath, '"...']);
 odoFileId = fopen(this.InputOdoFilePath, 'r');
-this.odo = struct('lp',[], 'x',[],'y',[],'theta',[], 'num', []);
-this.time = struct('lp',[],'t_odo',[],'t_mk',[]);
 
 % read loop
 while ~feof(odoFileId)
@@ -73,7 +63,15 @@ while ~feof(odoFileId)
     % read time offset measurements
     this.time.lp = [this.time.lp; lineTmp(1)];
     this.time.t_odo = [this.time.t_odo; lineTmp(2)];
-    this.time.t_mk = [this.time.t_mk; lineTmp(3)];    
+    this.time.t_mk = [this.time.t_mk; lineTmp(3)]; 
+    
+    % read encoder
+    if numel(lineTmp) < 8
+        continue;
+    end    
+    this.odo.enc_l = [this.odo.enc_l; lineTmp(7)];
+    this.odo.enc_r = [this.odo.enc_r; lineTmp(8)];
+
     
 end
 fclose(odoFileId);

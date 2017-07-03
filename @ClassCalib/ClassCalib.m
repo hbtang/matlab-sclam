@@ -17,7 +17,7 @@ classdef ClassCalib < handle
         % time delay between odo and camera, positive if camera is late
         dt;
         % odometric parameters
-        k_odo_lin; k_odo_rot;
+        k_odo_lin; k_odo_rot; mat_odo
         % camera intrinsic
         mat_camera; vec_distortion; image_width; image_height;
     end

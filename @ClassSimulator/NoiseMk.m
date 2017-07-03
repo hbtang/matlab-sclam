@@ -2,11 +2,11 @@ function mk_out = NoiseMk(this, mk_true, calib, setting)
 
 num_mk = numel(mk_true.lp);
 mk_out = mk_true;
-error_rot = setting.error;
+error = setting.error;
 
 %% add noise into image
-std_imgu = error_rot.mk.std_imgu;
-std_imgv = error_rot.mk.std_imgv;
+std_imgu = error.mk.std_imgu;
+std_imgv = error.mk.std_imgv;
 stdimage = [std_imgu;std_imgv;std_imgu;std_imgv;std_imgu;std_imgv;std_imgu;std_imgv];
 for i = 1:num_mk
     imageTemp = mk_out.image(i,:).';

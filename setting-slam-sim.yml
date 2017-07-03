@@ -2,9 +2,9 @@
 # Configuration file for calib-slam solver
 # Path of data
 path:
-  fold: .\sim
-  markfilename: Mk-eu0-ev0-s1.rec
-  odofilename: Odo-el0-er0-s1.rec
+  fold: C:\Workspace\Data\sim\sim-mkinit-enc-sqrmap-2017.6.23\
+  markfilename: mk.rec
+  odofilename: odo.rec
 # Prune threshold
 prune:
   thresh_lin: 500
