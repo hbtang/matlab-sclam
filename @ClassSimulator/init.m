@@ -22,7 +22,7 @@ disp(' ');
 %% reading config data
 disp('Reading camera config...');
 this.calib.rvec_b_c = this.setting.camera.rvec_b_c;
-this.calib.rvec_b_c = this.setting.camera.rvec_b_c;
+this.calib.tvec_b_c = this.setting.camera.tvec_b_c;
 this.calib.mat_camera = this.setting.camera.camera_matrix;
 this.calib.vec_distortion = this.setting.camera.distortion_coefficients;
 this.calib.image_width = this.setting.camera.image_width;

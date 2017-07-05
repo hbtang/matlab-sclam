@@ -3,7 +3,7 @@ clear;
 close all;
 
 % load configure
-setting = YAML.read('setting-slam-sim.yml');
+setting = YAML.read('setting-slam-sim-ceiling.yml');
 
 % measure
 measure = ClassMeasure(setting.path.fold, setting.path.markfilename, setting.path.odofilename);
@@ -25,10 +25,16 @@ calib = ClassCalib(setting);
 
 
 %% do auto init with encoder
+solver.DoAutoInitEnc(measure, calib);
 
+calib.rvec_b_c
+calib.tvec_b_c
+calib.mat_odo
+
+return;
 
 %% do auto init with odometry
-solver.DoAutoInit(measure, calib);
+solver.DoAutoInitOdo(measure, calib);
 options_drawmap = struct('strTitle', 'm-SLAM Result: Init. Calib.', 'fileNameFigOut', '.\temp\mslam-init', ...
     'bDrawMeasure', true, 'bDrawMkRot', true, 'scaleMk', 3);
 err_slam = solver.DoSlam(measure, calib, map, options_drawmap);

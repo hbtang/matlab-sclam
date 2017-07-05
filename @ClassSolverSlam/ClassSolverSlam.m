@@ -17,7 +17,9 @@ classdef ClassSolverSlam
         
         %% calibration autoinit from encoders
         function DoAutoInitEnc(this, measure, calib)
-            SolveGrndPlaneLin(this, measure, calib);            
+            SolveGrndPlaneLin(this, measure, calib);
+            ProjMk(this, measure, calib);
+            SolveMatOdoRot(this, measure, calib);
         end
         
         % outputs of ProjMk():
@@ -26,8 +28,11 @@ classdef ClassSolverSlam
         % 3. project mk measure: mk.se2_cg_mg
         ProjMk(this, measure, calib);
         
+        SolveMatOdoRot(this, measure, calib);
+        SolveOthers(this, measure, calib); % including yaw-xy-odolin
+        
         %% calibration init. linear solution
-        function DoAutoInit(this, measure, calib)
+        function DoAutoInitOdo(this, measure, calib)
             % step 1.1: init. estimate ground
             this.SolveGrndPlaneLin(measure, calib);
             % step 1.2: init. estimate yaw and XY
