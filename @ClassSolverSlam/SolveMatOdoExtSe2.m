@@ -1,4 +1,4 @@
-function SolveMatOdoRot(this, measure, calib)
+function SolveMatOdoExtSe2(this, measure, calib)
 %SOLVEMATODOROT 此处显示有关此函数的摘要
 %   此处显示详细说明
 

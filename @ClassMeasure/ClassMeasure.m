@@ -15,7 +15,6 @@ classdef ClassMeasure < handle
             'enc_l', [], 'enc_r', [], ...
             'num', []);
         time = struct('lp',[],'t_odo',[],'t_mk',[]);
-        
     end
     
     methods

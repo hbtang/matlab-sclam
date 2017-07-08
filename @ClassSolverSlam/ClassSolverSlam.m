@@ -19,7 +19,11 @@ classdef ClassSolverSlam
         function DoAutoInitEnc(this, measure, calib)
             SolveGrndPlaneLin(this, measure, calib);
             ProjMk(this, measure, calib);
-            SolveMatOdoRot(this, measure, calib);
+            
+            
+            SolveMatOdoExtSe2(this, measure, calib);
+            
+            
         end
         
         % outputs of ProjMk():
@@ -28,8 +32,23 @@ classdef ClassSolverSlam
         % 3. project mk measure: mk.se2_cg_mg
         ProjMk(this, measure, calib);
         
-        SolveMatOdoRot(this, measure, calib);
-        SolveOthers(this, measure, calib); % including yaw-xy-odolin
+        % SolveMatOdoExtSe2: solve mat_odo and the remaining 3 dof
+        % extrinsic parameter se2_b_cg
+        SolveMatOdoExtSe2(this, measure, calib);
+        
+        
+        % create odo measure from enc and mat_odo
+        % saved in measure.odo.enc_x/enc_y/enc_theta
+        measure_new = Enc2Odo(this, measure, calib);       
+        
+        
+        
+        % solver joint opt
+        SolveJointOptMSlamEnc(this, measure, calib, map, options);
+        SolveJointOptVSlamEnc(this, measure, calib, map, options);
+        RefineScale(this, calib, map);
+        
+        
         
         %% calibration init. linear solution
         function DoAutoInitOdo(this, measure, calib)

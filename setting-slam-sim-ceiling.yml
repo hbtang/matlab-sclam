@@ -3,8 +3,8 @@
 # Path of data
 path:
   fold: C:\Workspace\Data\sim\sim-mkinit-enc-ceiling-2017.7.4\
-  markfilename: mk-euv1-s1.rec
-  odofilename: odo.rec
+  markfilename: mk-euv1-s3.rec
+  odofilename: odo-el0.01-er0.01-s1.rec
 # Prune threshold
 prune:
   thresh_lin: 500
@@ -57,3 +57,7 @@ aruco:
     - [100, -100, 0]
   tvec_m_pt4:
     - [100, 100, 0]
+# Map, only for scale refinement
+map:
+  - [ 1,  0,  0,  0,  -2000,  -2000,   3000]
+  - [ 2,  0,  0,  0,  -2000,  2000,   3000]

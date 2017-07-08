@@ -126,26 +126,31 @@ classdef ClassCalib < handle
             %             disp(['Current estimated tvec_cg_c: ', num2str(tvec_cg_c(1)), ' ', ...
             %                 num2str(tvec_cg_c(2)), ' ', num2str(tvec_cg_c(3)), ' ']);
             
-            dt = this.dt;
-            disp(['Current estimated dt: ', num2str(dt), ' ']);
+%             dt = this.dt;
+%             disp(['Current estimated dt: ', num2str(dt), ' ']);
+%             
+%             k_odo_lin = this.k_odo_lin;
+%             k_odo_rot = this.k_odo_rot;
+%             disp(['Current estimated k_odo_lin k_odo_rot: ', ...
+%                 num2str(k_odo_lin), ' ', num2str(k_odo_rot), ' ']);
             
-            k_odo_lin = this.k_odo_lin;
-            k_odo_rot = this.k_odo_rot;
-            disp(['Current estimated k_odo_lin k_odo_rot: ', ...
-                num2str(k_odo_lin), ' ', num2str(k_odo_rot), ' ']);
-            
-            fx = this.mat_camera(1,1);
-            fy = this.mat_camera(2,2);
-            cx = this.mat_camera(1,3);
-            cy = this.mat_camera(2,3);
-            disp(['Current estimated fx fy cx cy: ', ...
-                num2str(fx), ' ', num2str(fy), ' ', ...
-                num2str(cx), ' ', num2str(cy), ' ']);
-            
-            distortion = this.vec_distortion;
-            disp(['Current estimated distortion: ', num2str(distortion(1)), ' ', ...
-                num2str(distortion(2)), ' ', num2str(distortion(3)), ' ', ...
-                num2str(distortion(4)), ' ', num2str(distortion(5)), ' ']);
+%             fx = this.mat_camera(1,1);
+%             fy = this.mat_camera(2,2);
+%             cx = this.mat_camera(1,3);
+%             cy = this.mat_camera(2,3);
+%             disp(['Current estimated fx fy cx cy: ', ...
+%                 num2str(fx), ' ', num2str(fy), ' ', ...
+%                 num2str(cx), ' ', num2str(cy), ' ']);
+%             
+%             distortion = this.vec_distortion;
+%             disp(['Current estimated distortion: ', num2str(distortion(1)), ' ', ...
+%                 num2str(distortion(2)), ' ', num2str(distortion(3)), ' ', ...
+%                 num2str(distortion(4)), ' ', num2str(distortion(5)), ' ']);
+
+            mat_odo = this.mat_odo;
+            disp(['Current estimated mat_odo: [', ...
+                num2str(mat_odo(1,1)), ' ', num2str(mat_odo(1,2)), '; ',...
+                num2str(mat_odo(2,1)), ' ', num2str(mat_odo(2,2)), '; ]']);
             
             disp(' ');
         end
