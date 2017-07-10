@@ -3,8 +3,8 @@
 # Path of data
 path:
   fold: C:\Workspace\Data\sim\sim-mkinit-enc-ceiling-2017.7.4\
-  markfilename: mk-euv1-s3.rec
-  odofilename: odo-el0.01-er0.01-s1.rec
+  markfilename: mk.rec
+  odofilename: odo.rec
 # Prune threshold
 prune:
   thresh_lin: 500

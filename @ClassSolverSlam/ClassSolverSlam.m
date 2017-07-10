@@ -15,15 +15,11 @@ classdef ClassSolverSlam
             this.setting = settingInput;
         end
         
-        %% calibration autoinit from encoders
+        %% auto init with encoder
         function DoAutoInitEnc(this, measure, calib)
             SolveGrndPlaneLin(this, measure, calib);
             ProjMk(this, measure, calib);
-            
-            
             SolveMatOdoExtSe2(this, measure, calib);
-            
-            
         end
         
         % outputs of ProjMk():
@@ -34,20 +30,27 @@ classdef ClassSolverSlam
         
         % SolveMatOdoExtSe2: solve mat_odo and the remaining 3 dof
         % extrinsic parameter se2_b_cg
-        SolveMatOdoExtSe2(this, measure, calib);
-        
+        SolveMatOdoExtSe2(this, measure, calib);        
         
         % create odo measure from enc and mat_odo
         % saved in measure.odo.enc_x/enc_y/enc_theta
-        measure_new = Enc2Odo(this, measure, calib);       
+        measure_new = Enc2Odo(this, measure, calib);
         
+        %% TODO: auto init with encoder, comparison method by G. Antonelli
+        function DoAutoInitEncGA(this, measure, calib)
+            %%% debug %%%
+%             SolveGrndPlaneLin(this, measure, calib);
+%             ProjMk(this, measure, calib);
+            %%% debug %%%            
+            SolveAutoInitGA(this, measure, calib);           
+        end
+        SolveAutoInitGA(this, measure, calib);
         
-        
+        %% joint opt with encoder
         % solver joint opt
         SolveJointOptMSlamEnc(this, measure, calib, map, options);
         SolveJointOptVSlamEnc(this, measure, calib, map, options);
-        RefineScale(this, calib, map);
-        
+        RefineScale(this, calib, map);        
         
         
         %% calibration init. linear solution

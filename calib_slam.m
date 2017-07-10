@@ -23,14 +23,18 @@ map = ClassMap;
 % calib
 calib = ClassCalib(setting);
 
+%% do auto init with encoder, comparison
+solver.DoAutoInitEncGA(measure, calib);
+disp('after auto init.');
+calib.DispCalib;
 
 %% do auto init with encoder
 solver.DoAutoInitEnc(measure, calib);
-disp('after auto init.')
+disp('after auto init.');
 calib.DispCalib;
-measure_from_enc = solver.Enc2Odo(measure, calib);
 
 %% init map from auto init
+measure_from_enc = solver.Enc2Odo(measure, calib);
 map.InitMap(measure_from_enc, calib);
 % options_drawmap = struct('strTitle', 'title', 'fileNameFigOut', '.\temp\init', ...
 %     'bDrawMeasure', true, 'bDrawMkRot', true, 'scaleMk', 3);
