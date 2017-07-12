@@ -2,12 +2,12 @@
 # Configuration file for calib-slam solver
 # Path of data
 path:
-  fold: .\sim
-  markfilename: Mk-eu0-ev0-s1.rec
-  odofilename: Odo-el0-er0-s1.rec
+  fold: C:\Workspace\Data\sim\exp-agv-enc-ceiling-mk211\
+  markfilename: mk.rec
+  odofilename: odo.rec
 # Prune threshold
 prune:
-  thresh_lin: 500
+  thresh_lin: 200
   thresh_rot: 0.2
 # Solver configure
 solver:
@@ -28,32 +28,41 @@ error:
 # Initial guess
 init:
   rvec_b_c:
-    - [0, 2.2214, -2.2214]
+    - [0, 0.1, 0]
   tvec_b_c: 
     - [0, 0, 0]
 truth:
   rvec_b_c:
-    - [0, 2.2214, -2.2214]
+    - [0, 0.1, 0]
   tvec_b_c: 
-    - [0.0, 0.0, 0.0]
+    - [0, 0, 0]
 # Camera intrinsics
 camera:
   image_width: 640
   image_height: 480
   camera_matrix:
-    - [500, 0., 320]
-    - [0., 500, 240]
+    - [553.53269 , 0., 326.99457]
+    - [0., 553.43758, 228.15649]
     - [0., 0., 1.]
   distortion_coefficients:
-    - [0, 0, 0, 0, 0]
+    - [ -0.05356, 0.10994, -0.00099, 0.00108, 0.00000 ]
 # Aruco
 aruco:
-  size: 200
+  size: 221
   tvec_m_pt1:
-    - [-100, 0, 100]
+    - [-105.5, 0, 105.5]
   tvec_m_pt2:
-    - [-100, 0, -100]
+    - [-105.5, 0, -105.5]
   tvec_m_pt3:
-    - [100, 0, -100]
+    - [105.5, 0, -105.5]
   tvec_m_pt4:
-    - [100, 0, 100]
+    - [105.5, 0, 105.5]
+# Map, only for scale refinement
+map:
+  - [ 1,  0,  0,  0,  -2000,  -2000,   3000]
+  - [ 2,  0,  0,  0,  -2000,  2000,   3000]
+# Odometry, intrinsics
+odo:
+  wheel_diameter: 100
+  thread_per_round: 1024
+  base_len: 750

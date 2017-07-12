@@ -1,4 +1,4 @@
-function PruneData( this, threshDistOdo, threshAngleOdo )
+function PruneData( this, threshDistOdo, threshAngleOdo, bUseEnc )
 %PRUNEDATA prune raw input data
 
 %% init
@@ -8,27 +8,42 @@ if nargin == 1
     threshAngleOdo = 5*pi/180;
 end
 
+if nargin < 4
+    bUseEnc = true;
+end
+
 
 %% prune odometry data
 x_ref = this.odo.x(1);
 y_ref = this.odo.y(1);
 theta_ref = this.odo.theta(1);
 
-odo_new = struct( ...
-    'lp',this.odo.lp(1), ...
-    'x', this.odo.x(1), ...
-    'y', this.odo.y(1), ...
-    'theta', this.odo.theta(1), ...
-    'enc_l', this.odo.enc_l(1), ...
-    'enc_r', this.odo.enc_r(1));
+if bUseEnc
+    odo_new = struct( ...
+        'lp',this.odo.lp(1), ...
+        'x', this.odo.x(1), ...
+        'y', this.odo.y(1), ...
+        'theta', this.odo.theta(1), ...
+        'enc_l', this.odo.enc_l(1), ...
+        'enc_r', this.odo.enc_r(1));
+else
+    odo_new = struct( ...
+        'lp',this.odo.lp(1), ...
+        'x', this.odo.x(1), ...
+        'y', this.odo.y(1), ...
+        'theta', this.odo.theta(1));
+end
 
 for i = 2:this.odo.num
     x_now = this.odo.x(i);
     y_now = this.odo.y(i);
     theta_now = this.odo.theta(i);
     lp_now = this.odo.lp(i);
-    enc_l_now = this.odo.enc_l(i);
-    enc_r_now = this.odo.enc_r(i);
+    
+    if bUseEnc
+        enc_l_now = this.odo.enc_l(i);
+        enc_r_now = this.odo.enc_r(i);
+    end
     
     dx = x_now - x_ref;
     dy = y_now - y_ref;
@@ -40,8 +55,11 @@ for i = 2:this.odo.num
         odo_new.x = [odo_new.x; x_now];
         odo_new.y = [odo_new.y; y_now];
         odo_new.theta = [odo_new.theta; theta_now];
-        odo_new.enc_l = [odo_new.enc_l; enc_l_now];
-        odo_new.enc_r = [odo_new.enc_r; enc_r_now];
+        
+        if bUseEnc
+            odo_new.enc_l = [odo_new.enc_l; enc_l_now];
+            odo_new.enc_r = [odo_new.enc_r; enc_r_now];
+        end
         
         x_ref = x_now;
         y_ref = y_now;

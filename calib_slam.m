@@ -3,7 +3,8 @@ clear;
 close all;
 
 % load configure
-setting = YAML.read('setting-slam-sim-ceiling.yml');
+% setting = YAML.read('setting-calib-sim-ceiling.yml');
+setting = YAML.read('setting-calib-exp-up.yml');
 
 % measure
 measure = ClassMeasure(setting.path.fold, setting.path.markfilename, setting.path.odofilename);
@@ -48,26 +49,26 @@ options_vslam = struct(...
 solver.SolveJointOptVSlamEnc(measure_from_enc, calib, map, options_vslam);
 disp('after v-joint-opt.')
 calib.DispCalib;
-% options_drawmap = struct('strTitle', 'title', 'fileNameFigOut', '.\temp\opt', ...
-%     'bDrawMeasure', true, 'bDrawMkRot', true, 'scaleMk', 3);
-% map.DrawMap(measure_from_enc, calib, setting, options_drawmap);
+options_drawmap = struct('strTitle', 'title', 'fileNameFigOut', '.\temp\opt', ...
+    'bDrawMeasure', true, 'bDrawMkRot', true, 'scaleMk', 3);
+map.DrawMap(measure_from_enc, calib, setting, options_drawmap);
 
 return;
 
 
 %% calib with v-slam
-% % do v-slam-calib
-% options_vslam = struct(...
-%     'bCalibExtRot', true, 'bCalibExtLin', true,...
-%     'bCalibTmp', true, 'bCalibOdo', true, ...
-%     'bCalibCamMat', false, 'bCalibCamDist', false);
-% solver.SolveJointOptVSlam(measure, calib, map, options_vslam);
-% % display v-slam-calib results
-% calib.DispCalib;
-% % draw v-slam results
-% options_drawmap = struct('strTitle', 'v-SLAM Result: v-Calib.', 'fileNameFigOut', '.\temp\vslam-all', ...
-%     'bDrawMeasure', true, 'bDrawMkRot', true, 'scaleMk', 3);
-% map.DrawMap(measure, calib, setting, options_drawmap);
+% do v-slam-calib
+options_vslam = struct(...
+    'bCalibExtRot', true, 'bCalibExtLin', true,...
+    'bCalibTmp', true, 'bCalibOdo', true, ...
+    'bCalibCamMat', false, 'bCalibCamDist', false);
+solver.SolveJointOptVSlam(measure, calib, map, options_vslam);
+% display v-slam-calib results
+calib.DispCalib;
+% draw v-slam results
+options_drawmap = struct('strTitle', 'v-SLAM Result: v-Calib.', 'fileNameFigOut', '.\temp\vslam-all', ...
+    'bDrawMeasure', true, 'bDrawMkRot', true, 'scaleMk', 3);
+map.DrawMap(measure, calib, setting, options_drawmap);
 % % compute v-slam error
 % options_errvslam = struct('bCalibTmp', true, 'bCalibOdo', true);
 % struct_errvslam_vcalib = Err_vSlam( measure, calib, map, setting, options_errvslam );
