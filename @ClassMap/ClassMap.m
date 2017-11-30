@@ -28,6 +28,8 @@ classdef ClassMap < handle
             this.kfs.rvec_w_b(:,3) = this.kfs.ps2d_w_b(:,3);
             this.kfs.tvec_w_b(:,1:2) = this.kfs.ps2d_w_b(:,1:2);
         end
+        % draw reprojected error
+        DrawError(this, measure, calib, setting, options);
         
     end
 end

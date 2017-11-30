@@ -13,10 +13,10 @@ if ~isfield(options, 'bCalibExtLin')
     options.bCalibExtLin = true;
 end
 if ~isfield(options, 'bCalibTmp')
-    options.bCalibTmp = true;
+    options.bCalibTmp = false;
 end
 if ~isfield(options, 'bCalibOdo')
-    options.bCalibOdo = true;
+    options.bCalibOdo = false;
 end
 if ~isfield(options, 'bCalibCamMat')
     options.bCalibCamMat = false;

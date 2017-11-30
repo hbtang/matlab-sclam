@@ -53,8 +53,8 @@ b = zeros(num_cnstr, 1);
 % define a reference axiz z in camera frame
 tvec_z_c = [0;0;1];
 
-vec_alpha_2 = zeros(num_cnstr, 1);
-vec_alpha_3 = zeros(num_cnstr, 1);
+vec_alpha_2 = [];
+vec_alpha_3 = [];
 for i = 1:num_cnstr
     rowOdo1 = cnstrRows{i}.rowOdo1;
     rowOdo2 = cnstrRows{i}.rowOdo2;
@@ -83,12 +83,15 @@ for i = 1:num_cnstr
     b(i) = theta_ij;
     
     % step 2: compute alpha 23
-    R = R3d_c1_c2;
-    r = 1/(2*sin(theta_ij)) * [R(3,2)-R(2,3); R(1,3)-R(3,1); R(2,1)-R(1,2)];
-    alpha_2_ij = atan2(norm(r(1:2)), r(3));
-    alpha_3_ij = atan2(r(2), -r(1));
-    vec_alpha_2(i) = alpha_2_ij;
-    vec_alpha_3(i) = alpha_3_ij;
+    % bug when theta_ij == 0
+    if theta_ij ~= 0
+        R = R3d_c1_c2;
+        r = 1/(2*sin(theta_ij)) * [R(3,2)-R(2,3); R(1,3)-R(3,1); R(2,1)-R(1,2)];
+        alpha_2_ij = atan2(norm(r(1:2)), r(3));
+        alpha_3_ij = atan2(r(2), -r(1));
+        vec_alpha_2 = [vec_alpha_2; alpha_2_ij];
+        vec_alpha_3 = [vec_alpha_3; alpha_3_ij];
+    end
 end
 
 mat_odo_rot = pinv(A)*b;
@@ -151,9 +154,6 @@ rmse_min = inf;
 v_min = V(:,1);
 for i = 1:5
     v = V(:,i);
-    if v(1) < 0
-        v = -v;
-    end
     v = v / norm(v(4:5));
     rmse = rms(Psi*v);
     if rmse < rmse_min
@@ -161,6 +161,11 @@ for i = 1:5
         v_min = v;
     end
 end
+if v_min(1) < 0
+    v_min = -v_min;
+end
+
+
 b = v_min(1); x = v_min(2); y = v_min(3); c = v_min(4); s = v_min(5);
 alpha_1 = atan2(s, c);
 rvec_alpha_1 = [0;0;alpha_1];

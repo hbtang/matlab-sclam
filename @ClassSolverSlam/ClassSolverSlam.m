@@ -36,7 +36,7 @@ classdef ClassSolverSlam
         % saved in measure.odo.enc_x/enc_y/enc_theta
         measure_new = Enc2Odo(this, measure, calib);
         
-        %% TODO: auto init with encoder, comparison method by G. Antonelli
+        %% comparison: auto init with encoder, comparison method by G. Antonelli
         function DoAutoInitEncGA(this, measure, calib)
             %%% debug %%%
 %             SolveGrndPlaneLin(this, measure, calib);

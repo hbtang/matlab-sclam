@@ -73,7 +73,7 @@ classdef ClassMeasure < handle
         
         % function read input file
         ReadRecData(this);
-        PruneData( this, threshDistOdo, threshAngleOdo, bUseEnc );
+        PruneData( this, threshDistOdo, threshAngleOdo, bUseEnc, bKeepAllMk );
         PruneDataByVecLp(this, vecLp);
         
         % function get measurement of lp

@@ -1,4 +1,4 @@
-function PruneData( this, threshDistOdo, threshAngleOdo, bUseEnc )
+function PruneData( this, threshDistOdo, threshAngleOdo, bUseEnc, bKeepAllMk )
 %PRUNEDATA prune raw input data
 
 %% init
@@ -10,6 +10,9 @@ end
 
 if nargin < 4
     bUseEnc = true;
+end
+if nargin < 5
+    bKeepAllMk = false;
 end
 
 
@@ -50,7 +53,28 @@ for i = 2:this.odo.num
     dl = norm([dx;dy]);
     dtheta = FunPrdCnst(theta_now - theta_ref, pi, -pi);
     
-    if (dl > threshDistOdo) || (abs(dtheta) > threshAngleOdo)
+    
+    % if has mk this loop
+    if bKeepAllMk && ~isempty(find(this.mk.lp == lp_now, 1))
+        bHasMkNow = true;
+    else
+        bHasMkNow = false;
+    end
+    
+    
+    bKeepThisOdo = false;
+    if ~bHasMkNow
+        if (dl > threshDistOdo) || (abs(dtheta) > threshAngleOdo)
+            bKeepThisOdo = true;
+        end
+    else
+        if (dl > 0.3*threshDistOdo) || (abs(dtheta) > 0.3*threshAngleOdo)
+            bKeepThisOdo = true;
+        end
+    end
+    
+    
+    if bKeepThisOdo
         odo_new.lp = [odo_new.lp; lp_now];
         odo_new.x = [odo_new.x; x_now];
         odo_new.y = [odo_new.y; y_now];

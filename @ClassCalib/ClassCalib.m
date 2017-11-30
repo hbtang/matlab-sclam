@@ -40,6 +40,8 @@ classdef ClassCalib < handle
             this.dt = 0;
             this.k_odo_lin = 1;
             this.k_odo_rot = 1;
+            
+            this.mat_odo = [0 0; 0 0];
         end
         
         %% write configures ...
@@ -158,9 +160,7 @@ classdef ClassCalib < handle
         function struct_result = GetCalibResult(this)
             struct_result.rvec_b_c = this.rvec_b_c;
             struct_result.tvec_b_c = this.tvec_b_c;
-            struct_result.dt_b_c = this.dt;
-            struct_result.k_odo_lin = this.k_odo_lin;
-            struct_result.k_odo_rot = this.k_odo_rot;
+            struct_result.mat_odo = this.mat_odo;
             struct_result.mat_camera = this.mat_camera;
             struct_result.vec_distortion = this.vec_distortion;
         end

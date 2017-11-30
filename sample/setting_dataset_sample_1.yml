@@ -2,12 +2,12 @@
 # Configuration file for calib-slam solver
 # Path of data
 path:
-  fold: C:\Workspace\Data\sim\sim-mkinit-enc-ceiling-2017.7.4\
-  markfilename: mk-euv0.1-s1.rec
+  fold: .\sample\dataset_sample_1\
+  markfilename: mk.rec
   odofilename: odo.rec
 # Prune threshold
 prune:
-  thresh_lin: 500
+  thresh_lin: 200
   thresh_rot: 0.2
 # Solver configure
 solver:
@@ -30,12 +30,12 @@ init:
   rvec_b_c:
     - [-0.0785, 0.0785, -1.5694]
   tvec_b_c: 
-    - [0, 0, 0]
-truth:
-  rvec_b_c:
-    - [-0.0785, 0.0785, -1.5694]
-  tvec_b_c: 
-    - [0.0, 0.0, 0.0]
+    - [100, -100, 0]
+#truth:
+#  rvec_b_c:
+#    - [-0.0785, 0.0785, -1.5694]
+#  tvec_b_c: 
+#    - [0.0, 0.0, 0.0]
 # Camera intrinsics
 camera:
   image_width: 640
@@ -48,7 +48,7 @@ camera:
     - [0, 0, 0, 0, 0]
 # Aruco
 aruco:
-  size: 200
+#  size: 200
   tvec_m_pt1:
     - [-100, 100, 0]
   tvec_m_pt2:
@@ -58,6 +58,6 @@ aruco:
   tvec_m_pt4:
     - [100, 100, 0]
 # Map, only for scale refinement
-map:
-  - [ 1,  0,  0,  0,  -2000,  -2000,   3000]
-  - [ 2,  0,  0,  0,  -2000,  2000,   3000]
+# map:
+#  - [ 1,  0,  0,  0,  -2000,  -2000,   3000]
+#  - [ 2,  0,  0,  0,  -2000,  2000,   3000]
